@@ -40,8 +40,7 @@ jobs:
             const parser = new rssParser({
               requestOptions: {
                 headers: {
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                  'Accept': 'application/rss+xml, application/xml;q=0.9'
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
                 }
               }
             });

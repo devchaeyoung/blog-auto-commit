@@ -37,7 +37,14 @@ jobs:
           script: |
             const fs = require('fs');
             const rssParser = require('rss-parser');
-            const parser = new rssParser();
+            const parser = new rssParser({
+              requestOptions: {
+                headers: {
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                  'Accept': 'application/rss+xml, application/xml;q=0.9'
+                }
+              }
+            });
             const feed = await parser.parseURL(process.env.TISTORY_RSS_URL);
 
             // 최신 5개 포스트 가져오기

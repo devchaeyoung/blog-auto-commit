@@ -1,0 +1,71 @@
+name: Readme Update
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: "0 0 * * *"  # 매일 자정에 실행
+
+env:
+  TISTORY_RSS_URL: ${{ secrets.TISTORY_RSS_URL }} # ← 여기에 본인의 Tistory RSS URL을 입력하세요
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install rss-parser
+
+      - name: Update README with latest Tistory posts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const rssParser = require('rss-parser');
+            const parser = new rssParser();
+            const feed = await parser.parseURL(process.env.TISTORY_RSS_URL);
+
+            // 최신 5개 포스트 가져오기
+            const posts = feed.items.slice(0, 5).map(item => {
+              const title = item.title.replace(/\[.*?\]\s*/, '');  // 대괄호 태그 제거 등 필요 시 정제
+              const link  = item.link;
+              return `- [${title}](${link})`;
+            }).join('\n');
+
+            // README.md 읽기
+            const readmePath = './README.md';
+            let md = fs.readFileSync(readmePath, 'utf8');
+
+            // <!-- POSTS-START --> ~ <!-- POSTS-END --> 사이를 교체
+            const updated = md.replace(
+              /<!-- POSTS-START -->[\s\S]*?<!-- POSTS-END -->/,
+              `<!-- POSTS-START -->\n${posts}\n<!-- POSTS-END -->`
+            );
+
+            fs.writeFileSync(readmePath, updated);
+
+      - name: Check for changes
+        id: verify_diff
+        run: |
+          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit README
+        if: steps.verify_diff.outputs.changed == 'true'
+        run: |
+          git config --local user.email "${{ secrets.GITHUB_EMAIL }}"
+          git config --local user.name "${{ secrets.GITHUB_NAME }}"
+          git add README.md
+          git commit -m "docs: 최신 Tistory 포스트 목록 업데이트"
+          git push origin main

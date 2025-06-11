@@ -6,7 +6,11 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: "0 0 * * *"  # 매일 자정에 실행
+    - cron: "0 */3 * * *"  # 3시간마다 실행
+
+permissions:
+  contents: write
+  pull-requests: write
 
 env:
   TISTORY_RSS_URL: ${{ secrets.TISTORY_RSS_URL }} # ← 여기에 본인의 Tistory RSS URL을 입력하세요
@@ -64,8 +68,8 @@ jobs:
       - name: Commit README
         if: steps.verify_diff.outputs.changed == 'true'
         run: |
-          git config --local user.email "${{ secrets.GITHUB_EMAIL }}"
-          git config --local user.name "${{ secrets.GITHUB_NAME }}"
+          git config --local user.email "${{ secrets.GH_EMAIL }}"
+          git config --local user.name "${{ secrets.GH_NAME }}"
           git add README.md
           git commit -m "docs: 최신 Tistory 포스트 목록 업데이트"
           git push origin main

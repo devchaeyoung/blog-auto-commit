@@ -1,13 +1,19 @@
 {
   "name": "auto-commit-blogging",
   "version": "1.0.0",
-  "description": "",
+  "description": "logging blog commit",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devchaeyoung/blog-auto-commit.git"
+  },
+  "author": "devchaeyoung",
   "license": "ISC",
-  "packageManager": "pnpm@10.11.0"
+  "bugs": {
+    "url": "https://github.com/devchaeyoung/blog-auto-commit/issues"
+  },
+  "homepage": "https://github.com/devchaeyoung/blog-auto-commit#readme"
 }

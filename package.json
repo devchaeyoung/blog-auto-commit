@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/devchaeyoung/blog-auto-commit/issues"
   },
-  "homepage": "https://github.com/devchaeyoung/blog-auto-commit#readme"
+  "homepage": "https://github.com/devchaeyoung/blog-auto-commit#readme",
+  "dependencies": {
+    "rss-parser": "^3.13.0"
+  }
 }

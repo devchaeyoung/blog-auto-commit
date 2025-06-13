@@ -13,7 +13,7 @@ permissions:
   pull-requests: write
 
 env:
-  TISTORY_RSS_URL: ${{ secrets.TISTORY_RSS_URL }} # ← 여기에 본인의 Tistory RSS URL을 입력하세요
+  TISTORY_RSS_URL: ${{ secrets.TISTORY_RSS_URL }}
 
 jobs:
   build:
@@ -27,9 +27,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm install rss-parser
+        run: npm ci
 
       - name: Update README with latest Tistory posts
         uses: actions/github-script@v7
